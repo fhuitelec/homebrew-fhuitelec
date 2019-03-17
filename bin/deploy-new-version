@@ -1,0 +1,103 @@
+#!/usr/bin/env bash
+
+## Dependencies
+
+if [ ! -x "$(which envsubst 2>/dev/null)" ]; then
+    echo 'error: egrep cannot be found. Please install it (`brew install gettext` for macOs)' >&2
+    exit 1
+fi
+
+if [ ! -x "$(which egrep 2>/dev/null)" ]; then
+    echo 'error: egrep cannot be found. Please install: it' >&2
+    exit 1
+fi
+
+if [ ! -x "$(which mktemp 2>/dev/null)" ]; then
+    echo 'error: mktemp cannot be found. Please install it' >&2
+    exit 1
+fi
+
+if [ ! -x "$(which shasum 2>/dev/null)" ]; then
+    echo 'error: shasum cannot be found. Please install it' >&2
+    exit 1
+fi
+
+## Check formula argument
+
+if [ -z "$1" ]
+  then
+    echo "error: no argument supplied" >&2
+    echo "usage: $0 FORMULA VERSION" >&2
+    exit 1
+fi
+
+formula=$1
+
+if [ ! -f formula-templates/$formula.rb ]; then
+    echo "error: formula file $PWD/formula-templates/$formula.rb does not exist" >&2
+    exit 1
+fi
+
+## Check version argument
+
+if [ -z "$2" ]
+  then
+    echo "error: need the VERSION argument" >&2
+    echo "usage: $0 FORMULA VERSION" >&2
+    exit 1
+fi
+
+version=$2
+
+## Generate SHA-256 for the tarball
+
+### Generate URL
+
+echo "Generating tarball URL"
+echo
+
+url=$(FORMULA_VERSION=$version envsubst < formula-templates/$formula.rb | egrep -o 'url ".*"' | egrep -o '".*"' | tr -d "\"")
+
+echo "Generated URL: $url"
+echo
+
+# todo: warn about tarball URLs
+
+### Download tarball
+
+echo "Downloading tarball"
+echo
+
+temp_tar_path=$(mktemp)
+wget ${url} -O $temp_tar_path
+
+rc=$?; if [[ $rc != 0 ]]; then echo "error: downloading tar ball at $url failed" >&2; exit $rc; fi
+
+echo
+echo "Generating SHA sum"
+echo
+
+shasum=$(shasum -a 256 $temp_tar_path | awk '{ print $1 }')
+
+echo "Generated SHA sum: $shasum"
+echo
+
+## Generate formula
+
+echo "Generating formula from template"
+
+FORMULA_VERSION=$version SHA_SUM=$shasum envsubst < formula-templates/kubectl-switch-state.rb > Formula/$formula.rb
+
+echo "Generated formula from template"
+
+### Cleanup
+
+echo
+echo "Cleaning up"
+echo
+
+rm -f $temp_tar_path
+
+### Last word
+
+echo "Please double-check the formula $PWD/Formula/$formula.rb"
