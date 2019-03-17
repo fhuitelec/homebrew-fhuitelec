@@ -33,3 +33,21 @@ export FORMULA=# The formula you wish to deploy
 export VERSION=# Your Github release name
 ./bin/deploy-new-version $FORMULA $VERSION
 ```
+
+### Test the formula locally
+
+```shell
+# Place yourself at the root of this repository locally
+rm -rf /usr/local/Homebrew/Library/Taps/fhuitelec/ | true
+mkdir /usr/local/Homebrew/Library/Taps/fhuitelec/
+ln -s $PWD /usr/local/Homebrew/Library/Taps/fhuitelec/
+```
+
+With this, you can test your formulas locally (`brew install`, etc.).
+
+Once you are done, you can clean this up:
+
+```shell
+rm -rf /usr/local/Homebrew/Library/Taps/fhuitelec/
+brew tap fhuitelec/fhuitelec
+```
