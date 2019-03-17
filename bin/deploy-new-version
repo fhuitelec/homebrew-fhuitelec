@@ -56,7 +56,7 @@ version=$2
 echo "Generating tarball URL"
 echo
 
-url=$(FORMULA_VERSION=$version envsubst < formula-templates/$formula.rb | egrep -o 'url ".*"' | egrep -o '".*"' | tr -d "\"")
+url=$(FORMULA_VERSION=$version envsubst < formula-templates/$formula.rb | egrep -o 'url ".*"' | egrep -o '".*"' | tr -d "\"" | head -1)
 
 echo "Generated URL: $url"
 echo
