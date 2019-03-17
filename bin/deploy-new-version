@@ -86,7 +86,7 @@ echo
 
 echo "Generating formula from template"
 
-FORMULA_VERSION=$version SHA_SUM=$shasum envsubst < formula-templates/kubectl-switch-state.rb > Formula/$formula.rb
+FORMULA_VERSION=$version SHA_SUM=$shasum envsubst < formula-templates/$formula.rb > Formula/$formula.rb
 
 echo "Generated formula from template"
 
