@@ -103,4 +103,5 @@ rm -f $temp_tar_path
 echo "Please double-check the formula $PWD/Formula/$formula.rb"
 echo
 echo "Git commit suggestion:"
+echo "git add Formula/$formula.rb formula-templates/$formula.rb"
 echo "git commit -m 'feat: upgrade \"$formula\" to version $version'"
