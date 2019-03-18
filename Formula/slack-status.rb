@@ -3,9 +3,9 @@ require "language/go"
 class SlackStatus < Formula
     desc "Tiny utilitary tool to update your Slack status using your CLI"
     homepage "https://github.com/fhuitelec/slack-status"
-    url "https://github.com/fhuitelec/slack-status/archive/0.2.0.tar.gz"
-    sha256 "b1ebaa2acc9469ef76e34396aefbf4a112005e5a82361f80efb60893376b8bf4"
-    version "0.2.0"
+    url "https://github.com/fhuitelec/slack-status/archive/0.2.1.tar.gz"
+    sha256 "b6c760906c510ba65b0c283875ce2d1cdee336bff7846688c6a2b3f95b57d26b"
+    version "0.2.1"
     head "https://github.com/fhuitelec/slack-status.git"
 
     depends_on "go" => :build
